@@ -24,6 +24,7 @@ class ConfigManager:
                 config.force_overwrite = data.get('force_overwrite', config.force_overwrite)
                 config.prefix = data.get('prefix', config.prefix)
                 config.postfix = data.get('postfix', config.postfix)
+                config.file_include_macro = data.get('file_include_macro', config.file_include_macro)
                 config.row_height = data.get('row_height', config.row_height)
                 config.row_header_width = data.get('row_header_width', config.row_header_width)
                 config.column_width = data.get('column_width', config.column_width)
@@ -50,6 +51,7 @@ class ConfigManager:
             'force_overwrite': config.force_overwrite,
             'prefix': config.prefix,
             'postfix': config.postfix,
+            'file_include_macro': config.file_include_macro,
             'row_height': config.row_height,
             'row_header_width': config.row_header_width,
             'column_width': config.column_width,

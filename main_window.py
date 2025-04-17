@@ -55,6 +55,7 @@ class MainWindow(QMainWindow):
             ("Open", self._open_config_file),
             ("Save As", self._save_as_config),
             ("Edit", lambda: QDesktopServices.openUrl(QUrl.fromLocalFile(os.path.abspath(ConfigManager.current_config_path)))),
+            ("Reload", self._reload_config_file),
             ("Generate", self._generate_shader_marco),
             ("Copy Output Path", self._copy_output_path),
             ("About", lambda: QDesktopServices.openUrl(QUrl(self.GITHUB_URL))),
@@ -99,6 +100,14 @@ class MainWindow(QMainWindow):
                 self._setup_title()
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"Failed to load config: {str(e)}")
+
+    def _reload_config_file(self):
+        try:
+            self.config = ConfigManager.load_config(ConfigManager.current_config_path)
+            self._load_data()
+            self._setup_title()
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to reload config: {str(e)}")
 
     def _save_as_config(self):
         path, _ = QFileDialog.getSaveFileName(self, "Save Config As", "", "JSON Files (*.json)")

@@ -27,6 +27,7 @@ class Config:
     force_overwrite: bool = False
     prefix: str = ""
     postfix: str = ""
+    file_include_macro: str = "PLATFORM_FEATURE_MACRO_INCLUDE"
     row_height: int = 40
     row_header_width: int = 250
     column_width: int = 150
