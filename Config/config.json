@@ -1,0 +1,71 @@
+{
+    "output_path": "Output/output.hlsl",
+    "force_overwrite": false,
+    "prefix": "",
+    "postfix": "",
+    "row_height": 40,
+    "row_header_width": 250,
+    "column_width": 150,
+    "column_header_height": 25,
+    "font_size": 10,
+    "platforms": [
+        {
+            "name": "PC",
+            "macro": "PLATFORM_PC"
+        },
+        {
+            "name": "IOS",
+            "macro": "PLATFORM_IOS"
+        }
+    ],
+    "qualities": [
+        {
+            "name": "High",
+            "macro": "QUALITY_HIGH"
+        },
+        {
+            "name": "Low",
+            "macro": "QUALITY_LOW"
+        }
+    ],
+    "feature_groups": [
+        {
+            "name": "Default",
+            "features": [
+                {
+                    "name": "Tessellation",
+                    "macro": "FEATURE_TESSELLATION"
+                },
+                {
+                    "name": "Ray Marching",
+                    "macro": "FEATURE_RAY_MARCHING"
+                }
+            ]
+        },
+        {
+            "name": "Character",
+            "features": [
+                {
+                    "name": "Subsurface",
+                    "macro": "FEATURE_SUBSURFACE"
+                }
+            ]
+        }
+    ],
+    "settings": {
+        "PLATFORM_PC|QUALITY_HIGH": {
+            "FEATURE_RAY_MARCHING": 0,
+            "FEATURE_TESSELLATION": 0
+        },
+        "PLATFORM_IOS|QUALITY_HIGH": {
+            "FEATURE_SUBSURFACE": 0,
+            "FEATURE_TESSELLATION": 0,
+            "FEATURE_RAY_MARCHING": 0
+        },
+        "PLATFORM_IOS|QUALITY_LOW": {
+            "FEATURE_SUBSURFACE": 0,
+            "FEATURE_TESSELLATION": 0,
+            "FEATURE_RAY_MARCHING": 0
+        }
+    }
+}
