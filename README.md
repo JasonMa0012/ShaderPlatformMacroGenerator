@@ -11,7 +11,8 @@ Easy to customize, suitable for various Shader Languages/Game Engines.
 1. Run `ShaderPlatformMacroGenerator.exe`
 2. Click `Edit` to open the config file and add the keywords you need.
 3. Click `Reload` to update the config.
-4. Enable/disable each feature based on each platform.
+4. Enable/disable each feature based on each platform.  
+   ![image](./~Assets/Snipaste_2025-04-23_16-59-53.png)
 5. Click `Generate` to save as a file.
 
 ## Build
