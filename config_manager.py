@@ -86,22 +86,3 @@ class ConfigManager:
             QMessageBox.critical(None, 'Save Failed', f'Error saving configuration:\n{str(e)}')
 
         ConfigManager.current_config_path = target_path
-        
-    @staticmethod
-    def get_column_header_labals(config: Config) -> list:
-        pairs = [(p, q) for p in config.platforms for q in config.qualities]
-        return [f"{p[0].name} | {p[1].name}" for p in pairs]
-
-    @staticmethod
-    def calculate_cell_indices(config: Config, column_index: int) -> tuple:
-        platform_idx = column_index // len(config.qualities)
-        quality_idx = column_index % len(config.qualities)
-        return platform_idx, quality_idx
-
-    @staticmethod
-    def get_feature_by_index(config: Config, group_index: int, row_index: int) -> Feature:
-        if 0 <= group_index < len(config.feature_groups):
-            group = config.feature_groups[group_index]
-            if 0 <= row_index < len(group.features):
-                return group.features[row_index]
-        return Feature('', '')

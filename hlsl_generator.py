@@ -11,19 +11,21 @@ def generate_hlsl(config: Config) -> str:
     # Platform condition checks
     for i, platform in enumerate(config.platforms):
         condition = "#if" if i == 0 else "#elif"
-        output.append(f"    {condition} defined({platform.macro})")
+        output.append(f"    {condition} ({' || '.join([f'defined({macro})' for macro in platform.macros])})")
         
         # Quality level condition chain
         for i_quality, quality in enumerate(config.qualities):
             q_condition = "#if" if i_quality == 0 else "#elif"
-            output.append(f"        {q_condition} defined({quality.macro})")
+            or_condition = ' || '.join([f'defined({macro})' for macro in quality.macros])
+            output.append(f"        {q_condition} ({or_condition})")
             
-            # Feature macros (遍历所有功能组)
-            key = f"{platform.macro}|{quality.macro}"
+            # Features
+            key = "||".join([f"{p}|{q}" for p in platform.macros for q in quality.macros])
             for group in config.feature_groups:
                 for feature in group.features:
-                    value = config.settings.get(key, {}).get(feature.macro, 1)
-                    output.append(f"            #define {feature.macro} {value}")
+                    value = config.get_feature_state(platform, quality, feature)
+                    for macro in feature.macros:
+                        output.append(f"            #define {macro} {int(value)}")
         
         output.append("        #endif")
     

@@ -12,21 +12,31 @@
     "platforms": [
         {
             "name": "PC",
-            "macro": "PLATFORM_PC"
+            "macros": [
+                "PLATFORM_PC",
+                "SHADER_API_DX11"
+            ]
         },
         {
             "name": "IOS",
-            "macro": "PLATFORM_IOS"
+            "macros": [
+                "PLATFORM_IOS"
+            ]
         }
     ],
     "qualities": [
         {
             "name": "High",
-            "macro": "QUALITY_HIGH"
+            "macros": [
+                "QUALITY_HIGH",
+                "QUALITY_ULTRA"
+            ]
         },
         {
             "name": "Low",
-            "macro": "QUALITY_LOW"
+            "macros": [
+                "QUALITY_LOW"
+            ]
         }
     ],
     "feature_groups": [
@@ -35,11 +45,16 @@
             "features": [
                 {
                     "name": "Tessellation",
-                    "macro": "FEATURE_TESSELLATION"
+                    "macros": [
+                        "FEATURE_TESSELLATION",
+                        "ENABLE_GEOMETRY_SHADER"
+                    ]
                 },
                 {
                     "name": "Ray Marching",
-                    "macro": "FEATURE_RAY_MARCHING"
+                    "macros": [
+                        "FEATURE_RAY_MARCHING"
+                    ]
                 }
             ]
         },
@@ -48,24 +63,23 @@
             "features": [
                 {
                     "name": "Subsurface",
-                    "macro": "FEATURE_SUBSURFACE"
+                    "macros": [
+                        "FEATURE_SUBSURFACE"
+                    ]
                 }
             ]
         }
     ],
     "settings": {
-        "PLATFORM_IOS|QUALITY_HIGH": {
-            "FEATURE_SUBSURFACE": 0,
-            "FEATURE_TESSELLATION": 0,
-            "FEATURE_RAY_MARCHING": 0
+        "PC|Low": {
+            "Ray Marching": 0,
+            "Subsurface": 0,
+            "Tessellation": 0
         },
-        "PLATFORM_IOS|QUALITY_LOW": {
-            "FEATURE_SUBSURFACE": 0,
-            "FEATURE_TESSELLATION": 0,
-            "FEATURE_RAY_MARCHING": 0
-        },
-        "PLATFORM_PC|QUALITY_HIGH": {
-            "FEATURE_RAY_MARCHING": 0
+        "IOS|Low": {
+            "Subsurface": 0,
+            "Ray Marching": 0,
+            "Tessellation": 0
         }
     }
 }

@@ -138,23 +138,14 @@ class MainWindow(QMainWindow):
                         checkbox = widget.findChild(QCheckBox) if widget else None
                         if checkbox:
                             checkbox.setChecked(base_state)
-                            platform_idx, quality_idx = ConfigManager.calculate_cell_indices(self.config, col)
+                            platform_idx, quality_idx = self.config.calculate_cell_indices(col)
                             platform = self.config.platforms[platform_idx]
                             quality = self.config.qualities[quality_idx]
-                            key = f"{platform.macro}|{quality.macro}"
-                            feature = ConfigManager.get_feature_by_index(self.config, self.tabs.currentIndex(), row)
-                            self._update_setting(key, feature.macro, 1 if base_state else 0)
+                            feature = self.config.get_feature_by_index(self.tabs.currentIndex(), row)
+                            self._set_feature_state(platform, quality, feature, base_state)
 
-    def _update_setting(self, key: str, macro: str, value: int):
-        if value == 0:
-            self.config.settings.setdefault(key, {})[macro] = value
-        else:
-            if key in self.config.settings:
-                if macro in self.config.settings[key]:
-                    del self.config.settings[key][macro]
-                if not self.config.settings[key]:
-                    del self.config.settings[key]
-        
+    def _set_feature_state(self, platform: Platform, quality: Quality, feature: Feature, value: bool):
+        self.config.set_feature_state(platform, quality, feature, value)
         ConfigManager.save_config(self.config)
 
     def _copy_output_path(self):
@@ -196,19 +187,19 @@ class MainWindow(QMainWindow):
             table.setItem(0, 0, QTableWidgetItem("Please configure platforms and quality levels first!"))
             return
 
-        columns = ConfigManager.get_column_header_labals(self.config)
+        columns = self.config.get_column_header_labels()
         table.setColumnCount(len(columns))
         table.setHorizontalHeaderLabels(columns)
         table.setRowCount(len(features))
 
         # Populate checkboxes
         for col, _ in enumerate(columns):
-            platform_idx = col // len(self.config.qualities)
-            quality_idx = col % len(self.config.qualities)
+            platform_idx, quality_idx = self.config.calculate_cell_indices(col)
             
             # Boundary check
             if platform_idx >= len(self.config.platforms) or quality_idx >= len(self.config.qualities):
                 continue
+
             platform = self.config.platforms[platform_idx]
             quality = self.config.qualities[quality_idx]
             
@@ -216,12 +207,10 @@ class MainWindow(QMainWindow):
                 feature = features[row]
                 checkbox = QCheckBox()
                 checkbox.setStyleSheet('QCheckBox::indicator { width: 20px; height: 20px; }')
-                key = f"{platform.macro}|{quality.macro}"
-                stored_value = self.config.settings.get(key, {}).get(feature.macro, 1)
-                checkbox.setChecked(bool(stored_value))
+                checkbox.setChecked(self.config.get_feature_state(platform, quality, feature))
                 checkbox.stateChanged.connect(
-                    lambda state, k=key, m=feature.macro: 
-                    self._update_setting(k, m, 1 if state else 0)
+                    lambda state, p=platform, q=quality, f=feature: 
+                    self._set_feature_state(p, q, f, state)
                 )
                 widget = QWidget()
                 layout = QHBoxLayout()
@@ -231,7 +220,7 @@ class MainWindow(QMainWindow):
 
         # Populate row headers
         for row, feature in enumerate(features):
-            table.setVerticalHeaderItem(row, QTableWidgetItem(f'{feature.name}\n{feature.macro}'))
+            table.setVerticalHeaderItem(row, QTableWidgetItem(f'{feature.name}'))
         
         # Set cell dimensions
         table.verticalHeader().setSectionResizeMode(QHeaderView.Interactive)

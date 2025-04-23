@@ -3,23 +3,27 @@
 #ifndef PLATFORM_FEATURE_MACRO_INCLUDE
     #define PLATFORM_FEATURE_MACRO_INCLUDE
 
-    #if defined(PLATFORM_PC)
-        #if defined(QUALITY_HIGH)
+    #if (defined(PLATFORM_PC) || defined(SHADER_API_DX11))
+        #if (defined(QUALITY_HIGH) || defined(QUALITY_ULTRA))
             #define FEATURE_TESSELLATION 1
+            #define ENABLE_GEOMETRY_SHADER 1
             #define FEATURE_RAY_MARCHING 1
             #define FEATURE_SUBSURFACE 1
-        #elif defined(QUALITY_LOW)
-            #define FEATURE_TESSELLATION 1
-            #define FEATURE_RAY_MARCHING 1
-            #define FEATURE_SUBSURFACE 1
-        #endif
-    #elif defined(PLATFORM_IOS)
-        #if defined(QUALITY_HIGH)
+        #elif (defined(QUALITY_LOW))
             #define FEATURE_TESSELLATION 0
+            #define ENABLE_GEOMETRY_SHADER 0
             #define FEATURE_RAY_MARCHING 0
             #define FEATURE_SUBSURFACE 0
-        #elif defined(QUALITY_LOW)
+        #endif
+    #elif (defined(PLATFORM_IOS))
+        #if (defined(QUALITY_HIGH) || defined(QUALITY_ULTRA))
+            #define FEATURE_TESSELLATION 1
+            #define ENABLE_GEOMETRY_SHADER 1
+            #define FEATURE_RAY_MARCHING 1
+            #define FEATURE_SUBSURFACE 1
+        #elif (defined(QUALITY_LOW))
             #define FEATURE_TESSELLATION 0
+            #define ENABLE_GEOMETRY_SHADER 0
             #define FEATURE_RAY_MARCHING 0
             #define FEATURE_SUBSURFACE 0
         #endif
