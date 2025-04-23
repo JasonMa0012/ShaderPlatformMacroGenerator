@@ -17,8 +17,14 @@ Easy to customize, suitable for various Shader Languages/Game Engines.
 ## Build
 
 1. Run `_install_deps.bat`
+
    > - Python==3.12.1
    > - PyQt5==5.15.11
    > - pyinstaller==6.13.0
    >
 2. Run `_build.bat`
+
+## Reference
+
+- Unity Builtin Macros: [https://docs.unity3d.com/2022.3/Documentation/Manual/SL-BuiltinMacros.html](https://docs.unity3d.com/2022.3/Documentation/Manual/SL-BuiltinMacros.html)
+- Unreal Builtin Macros: Engine/Shaders/Public/Platform.ush
