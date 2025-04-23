@@ -27,4 +27,4 @@ Easy to customize, suitable for various Shader Languages/Game Engines.
 ## Reference
 
 - Unity Builtin Macros: [https://docs.unity3d.com/2022.3/Documentation/Manual/SL-BuiltinMacros.html](https://docs.unity3d.com/2022.3/Documentation/Manual/SL-BuiltinMacros.html)
-- Unreal Builtin Macros: Engine/Shaders/Public/Platform.ush
+- Unreal Builtin Macros: [https://github.com/EpicGames/UnrealEngine/blob/5.5/Engine/Shaders/Public/Platform.ush](https://github.com/EpicGames/UnrealEngine/blob/5.5/Engine/Shaders/Public/Platform.ush)
