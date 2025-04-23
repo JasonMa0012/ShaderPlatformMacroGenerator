@@ -158,25 +158,26 @@ class MainWindow(QMainWindow):
                 path, _ = QFileDialog.getSaveFileName(self, 'Save File', '', 'HLSL Files (*.hlsl)')
                 if not path:
                     return
-                path = os.path.abspath(path)
+                path = os.path.relpath(os.path.abspath(path))
                 self.config.output_path = path
             
-            dir_name = os.path.dirname(self.config.output_path) or os.getcwd()
+            target_abs_path = os.path.abspath(self.config.output_path)
+            dir_name = os.path.dirname(target_abs_path) or os.getcwd()
             os.makedirs(dir_name, exist_ok=True)
             
-            if os.path.exists(self.config.output_path):
+            if os.path.exists(target_abs_path):
                 if not self.config.force_overwrite:
                     reply = QMessageBox.question(self, 'File Exists', 
-                        f'Target file({self.config.output_path}) already exists, overwrite?',
+                        f'Target file({target_abs_path}) already exists, overwrite?',
                         QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
                     if reply != QMessageBox.Yes:
                         return
-                if not os.access(self.config.output_path, os.W_OK):
-                    os.chmod(self.config.output_path, 0o777)
+                if not os.access(target_abs_path, os.W_OK):
+                    os.chmod(target_abs_path, 0o777)
 
-            with open(self.config.output_path, 'w') as f:
+            with open(target_abs_path, 'w') as f:
                 f.write(generate_hlsl(self.config))
-            QMessageBox.information(self, 'Success', f'File saved to: {self.config.output_path}')
+            QMessageBox.information(self, 'Success', f'File saved to: {target_abs_path}')
         except Exception as e:
             QMessageBox.critical(self, 'Error', f'File save failed: {str(e)}')
 

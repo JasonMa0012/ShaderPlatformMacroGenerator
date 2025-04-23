@@ -8,19 +8,15 @@ def generate_hlsl(config: Config) -> str:
     output.append(f"    #define {config.file_include_macro}\n")
     
     
-    # Platform condition checks
+    # Platform
     for i, platform in enumerate(config.platforms):
-        condition = "#if" if i == 0 else "#elif"
-        output.append(f"    {condition} ({' || '.join([f'defined({macro})' for macro in platform.macros])})")
+        output.append(f"    {"#if" if i == 0 else "#elif"} {' '.join([macro for macro in platform.macros])}")
         
-        # Quality level condition chain
+        # Quality
         for i_quality, quality in enumerate(config.qualities):
-            q_condition = "#if" if i_quality == 0 else "#elif"
-            or_condition = ' || '.join([f'defined({macro})' for macro in quality.macros])
-            output.append(f"        {q_condition} ({or_condition})")
+            output.append(f"        {"#if" if i_quality == 0 else "#elif"} {' '.join([macro for macro in quality.macros])}")
             
-            # Features
-            key = "||".join([f"{p}|{q}" for p in platform.macros for q in quality.macros])
+            # Feature
             for group in config.feature_groups:
                 for feature in group.features:
                     value = config.get_feature_state(platform, quality, feature)

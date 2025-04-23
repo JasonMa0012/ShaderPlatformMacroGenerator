@@ -13,14 +13,14 @@
         {
             "name": "PC",
             "macros": [
-                "PLATFORM_PC",
-                "SHADER_API_DX11"
+                "defined(PLATFORM_PC)",
+                "|| defined(SHADER_API_DX11)"
             ]
         },
         {
             "name": "IOS",
             "macros": [
-                "PLATFORM_IOS"
+                "defined(PLATFORM_IOS)"
             ]
         }
     ],
@@ -28,8 +28,7 @@
         {
             "name": "High",
             "macros": [
-                "QUALITY_HIGH",
-                "QUALITY_ULTRA"
+                "QUALITY_HIGH || QUALITY_ULTRA"
             ]
         },
         {
