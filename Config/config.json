@@ -45,14 +45,14 @@
                 {
                     "name": "Tessellation",
                     "macros": [
-                        "FEATURE_TESSELLATION",
-                        "ENABLE_GEOMETRY_SHADER"
+                        "PLATFORM_ENABLE_TESSELLATION",
+                        "PLATFORM_ENABLE_GEOMETRY_SHADER"
                     ]
                 },
                 {
                     "name": "Ray Marching",
                     "macros": [
-                        "FEATURE_RAY_MARCHING"
+                        "PLATFORM_ENABLE_RAY_MARCHING"
                     ]
                 }
             ]
@@ -63,7 +63,7 @@
                 {
                     "name": "Subsurface",
                     "macros": [
-                        "FEATURE_SUBSURFACE"
+                        "PLATFORM_ENABLE_SUBSURFACE"
                     ]
                 }
             ]
