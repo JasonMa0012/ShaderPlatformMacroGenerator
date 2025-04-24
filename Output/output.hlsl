@@ -7,27 +7,91 @@
 
     #if defined(PLATFORM_PC) || defined(SHADER_API_DX11)
         #if QUALITY_HIGH || QUALITY_ULTRA
+            #ifdef FEATURE_TESSELLATION
+                #undef FEATURE_TESSELLATION
+            #endif
             #define FEATURE_TESSELLATION 1
+
+            #ifdef ENABLE_GEOMETRY_SHADER
+                #undef ENABLE_GEOMETRY_SHADER
+            #endif
             #define ENABLE_GEOMETRY_SHADER 1
+
+            #ifdef FEATURE_RAY_MARCHING
+                #undef FEATURE_RAY_MARCHING
+            #endif
             #define FEATURE_RAY_MARCHING 1
+
+            #ifdef FEATURE_SUBSURFACE
+                #undef FEATURE_SUBSURFACE
+            #endif
             #define FEATURE_SUBSURFACE 1
+
         #elif QUALITY_LOW
+            #ifdef FEATURE_TESSELLATION
+                #undef FEATURE_TESSELLATION
+            #endif
             #define FEATURE_TESSELLATION 0
+
+            #ifdef ENABLE_GEOMETRY_SHADER
+                #undef ENABLE_GEOMETRY_SHADER
+            #endif
             #define ENABLE_GEOMETRY_SHADER 0
+
+            #ifdef FEATURE_RAY_MARCHING
+                #undef FEATURE_RAY_MARCHING
+            #endif
             #define FEATURE_RAY_MARCHING 0
+
+            #ifdef FEATURE_SUBSURFACE
+                #undef FEATURE_SUBSURFACE
+            #endif
             #define FEATURE_SUBSURFACE 0
+
         #endif
     #elif defined(PLATFORM_IOS)
         #if QUALITY_HIGH || QUALITY_ULTRA
+            #ifdef FEATURE_TESSELLATION
+                #undef FEATURE_TESSELLATION
+            #endif
             #define FEATURE_TESSELLATION 1
+
+            #ifdef ENABLE_GEOMETRY_SHADER
+                #undef ENABLE_GEOMETRY_SHADER
+            #endif
             #define ENABLE_GEOMETRY_SHADER 1
+
+            #ifdef FEATURE_RAY_MARCHING
+                #undef FEATURE_RAY_MARCHING
+            #endif
             #define FEATURE_RAY_MARCHING 1
+
+            #ifdef FEATURE_SUBSURFACE
+                #undef FEATURE_SUBSURFACE
+            #endif
             #define FEATURE_SUBSURFACE 1
+
         #elif QUALITY_LOW
+            #ifdef FEATURE_TESSELLATION
+                #undef FEATURE_TESSELLATION
+            #endif
             #define FEATURE_TESSELLATION 0
+
+            #ifdef ENABLE_GEOMETRY_SHADER
+                #undef ENABLE_GEOMETRY_SHADER
+            #endif
             #define ENABLE_GEOMETRY_SHADER 0
+
+            #ifdef FEATURE_RAY_MARCHING
+                #undef FEATURE_RAY_MARCHING
+            #endif
             #define FEATURE_RAY_MARCHING 0
+
+            #ifdef FEATURE_SUBSURFACE
+                #undef FEATURE_SUBSURFACE
+            #endif
             #define FEATURE_SUBSURFACE 0
+
         #endif
     #endif
 
