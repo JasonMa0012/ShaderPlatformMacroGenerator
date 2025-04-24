@@ -24,7 +24,7 @@ def generate_hlsl(config: Config) -> str:
                 for feature in group.features:
                     value = config.get_feature_state(platform, quality, feature)
                     for macro in feature.macros:
-                        output.append(f"            #define {macro} {int(value)}")
+                        output.append(f"            {macro.replace("$value", str(int(value)))}")
         
         output.append("        #endif")
     

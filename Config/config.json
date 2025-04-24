@@ -45,14 +45,16 @@
                 {
                     "name": "Tessellation",
                     "macros": [
-                        "PLATFORM_ENABLE_TESSELLATION",
-                        "PLATFORM_ENABLE_GEOMETRY_SHADER"
+                        "#define PLATFORM_ENABLE_TESSELLATION $value",
+                        "#define PLATFORM_ENABLE_GEOMETRY_SHADER $value",
+                        ""
                     ]
                 },
                 {
                     "name": "Ray Marching",
                     "macros": [
-                        "PLATFORM_ENABLE_RAY_MARCHING"
+                        "#define PLATFORM_ENABLE_RAY_MARCHING $value",
+                        ""
                     ]
                 }
             ]
@@ -63,7 +65,9 @@
                 {
                     "name": "Subsurface",
                     "macros": [
-                        "PLATFORM_ENABLE_SUBSURFACE"
+                        "#ifndef PLATFORM_ENABLE_SUBSURFACE",
+                        "    #define PLATFORM_ENABLE_SUBSURFACE $value",
+                        "#endif"
                     ]
                 }
             ]

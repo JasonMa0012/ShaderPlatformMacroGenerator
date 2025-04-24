@@ -9,25 +9,41 @@
         #if QUALITY_HIGH || QUALITY_ULTRA
             #define PLATFORM_ENABLE_TESSELLATION 1
             #define PLATFORM_ENABLE_GEOMETRY_SHADER 1
+            
             #define PLATFORM_ENABLE_RAY_MARCHING 1
-            #define PLATFORM_ENABLE_SUBSURFACE 1
+            
+            #ifndef PLATFORM_ENABLE_SUBSURFACE
+                #define PLATFORM_ENABLE_SUBSURFACE 1
+            #endif
         #elif QUALITY_LOW
             #define PLATFORM_ENABLE_TESSELLATION 0
             #define PLATFORM_ENABLE_GEOMETRY_SHADER 0
+            
             #define PLATFORM_ENABLE_RAY_MARCHING 0
-            #define PLATFORM_ENABLE_SUBSURFACE 0
+            
+            #ifndef PLATFORM_ENABLE_SUBSURFACE
+                #define PLATFORM_ENABLE_SUBSURFACE 0
+            #endif
         #endif
     #elif defined(PLATFORM_IOS)
         #if QUALITY_HIGH || QUALITY_ULTRA
             #define PLATFORM_ENABLE_TESSELLATION 1
             #define PLATFORM_ENABLE_GEOMETRY_SHADER 1
+            
             #define PLATFORM_ENABLE_RAY_MARCHING 1
-            #define PLATFORM_ENABLE_SUBSURFACE 1
+            
+            #ifndef PLATFORM_ENABLE_SUBSURFACE
+                #define PLATFORM_ENABLE_SUBSURFACE 1
+            #endif
         #elif QUALITY_LOW
             #define PLATFORM_ENABLE_TESSELLATION 0
             #define PLATFORM_ENABLE_GEOMETRY_SHADER 0
+            
             #define PLATFORM_ENABLE_RAY_MARCHING 0
-            #define PLATFORM_ENABLE_SUBSURFACE 0
+            
+            #ifndef PLATFORM_ENABLE_SUBSURFACE
+                #define PLATFORM_ENABLE_SUBSURFACE 0
+            #endif
         #endif
     #endif
 
