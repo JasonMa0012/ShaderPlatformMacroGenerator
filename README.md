@@ -96,7 +96,8 @@ Easy to customize, suitable for various Shader Languages/Game Engines.
                 {
                     "name": "Subsurface",
                     "macros": [
-                        "#ifndef PLATFORM_ENABLE_SUBSURFACE",
+                        "#if defined(PLATFORM_ENABLE_SUBSURFACE)",
+                        "    #undef PLATFORM_ENABLE_SUBSURFACE",
                         "    #define PLATFORM_ENABLE_SUBSURFACE $value",
                         "#endif"
                     ]
@@ -136,7 +137,8 @@ Easy to customize, suitable for various Shader Languages/Game Engines.
           
             #define PLATFORM_ENABLE_RAY_MARCHING 1
           
-            #ifndef PLATFORM_ENABLE_SUBSURFACE
+            #if defined(PLATFORM_ENABLE_SUBSURFACE)
+                #undef PLATFORM_ENABLE_SUBSURFACE
                 #define PLATFORM_ENABLE_SUBSURFACE 1
             #endif
         #elif QUALITY_LOW
@@ -145,7 +147,8 @@ Easy to customize, suitable for various Shader Languages/Game Engines.
           
             #define PLATFORM_ENABLE_RAY_MARCHING 0
           
-            #ifndef PLATFORM_ENABLE_SUBSURFACE
+            #if defined(PLATFORM_ENABLE_SUBSURFACE)
+                #undef PLATFORM_ENABLE_SUBSURFACE
                 #define PLATFORM_ENABLE_SUBSURFACE 0
             #endif
         #endif
@@ -156,7 +159,8 @@ Easy to customize, suitable for various Shader Languages/Game Engines.
           
             #define PLATFORM_ENABLE_RAY_MARCHING 1
           
-            #ifndef PLATFORM_ENABLE_SUBSURFACE
+            #if defined(PLATFORM_ENABLE_SUBSURFACE)
+                #undef PLATFORM_ENABLE_SUBSURFACE
                 #define PLATFORM_ENABLE_SUBSURFACE 1
             #endif
         #elif QUALITY_LOW
@@ -165,7 +169,8 @@ Easy to customize, suitable for various Shader Languages/Game Engines.
           
             #define PLATFORM_ENABLE_RAY_MARCHING 0
           
-            #ifndef PLATFORM_ENABLE_SUBSURFACE
+            #if defined(PLATFORM_ENABLE_SUBSURFACE)
+                #undef PLATFORM_ENABLE_SUBSURFACE
                 #define PLATFORM_ENABLE_SUBSURFACE 0
             #endif
         #endif

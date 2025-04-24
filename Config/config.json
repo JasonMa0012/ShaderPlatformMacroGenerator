@@ -65,7 +65,8 @@
                 {
                     "name": "Subsurface",
                     "macros": [
-                        "#ifndef PLATFORM_ENABLE_SUBSURFACE",
+                        "#if defined(PLATFORM_ENABLE_SUBSURFACE)",
+                        "    #undef PLATFORM_ENABLE_SUBSURFACE",
                         "    #define PLATFORM_ENABLE_SUBSURFACE $value",
                         "#endif"
                     ]

@@ -12,7 +12,8 @@
             
             #define PLATFORM_ENABLE_RAY_MARCHING 1
             
-            #ifndef PLATFORM_ENABLE_SUBSURFACE
+            #if defined(PLATFORM_ENABLE_SUBSURFACE)
+                #undef PLATFORM_ENABLE_SUBSURFACE
                 #define PLATFORM_ENABLE_SUBSURFACE 1
             #endif
         #elif QUALITY_LOW
@@ -21,7 +22,8 @@
             
             #define PLATFORM_ENABLE_RAY_MARCHING 0
             
-            #ifndef PLATFORM_ENABLE_SUBSURFACE
+            #if defined(PLATFORM_ENABLE_SUBSURFACE)
+                #undef PLATFORM_ENABLE_SUBSURFACE
                 #define PLATFORM_ENABLE_SUBSURFACE 0
             #endif
         #endif
@@ -32,7 +34,8 @@
             
             #define PLATFORM_ENABLE_RAY_MARCHING 1
             
-            #ifndef PLATFORM_ENABLE_SUBSURFACE
+            #if defined(PLATFORM_ENABLE_SUBSURFACE)
+                #undef PLATFORM_ENABLE_SUBSURFACE
                 #define PLATFORM_ENABLE_SUBSURFACE 1
             #endif
         #elif QUALITY_LOW
@@ -41,7 +44,8 @@
             
             #define PLATFORM_ENABLE_RAY_MARCHING 0
             
-            #ifndef PLATFORM_ENABLE_SUBSURFACE
+            #if defined(PLATFORM_ENABLE_SUBSURFACE)
+                #undef PLATFORM_ENABLE_SUBSURFACE
                 #define PLATFORM_ENABLE_SUBSURFACE 0
             #endif
         #endif
