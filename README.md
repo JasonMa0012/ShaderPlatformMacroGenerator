@@ -1,180 +1,152 @@
 # Shader Platform Macro Generator
 
-轻松编辑并控制每个平台每个质量的每个功能的开关, 然后自动生成宏定义, 以减少Shader变体数量.
-易于自定义, 适用于多种Shader语言/游戏引擎.
+通过 Excel 配置每个平台、每个画质等级下的 Feature 开关，自动生成 HLSL 预处理宏头文件，减少 Shader 变体数量。
+易于自定义，适用于 Unity / Unreal 等多种 Shader 语言和游戏引擎。
 
-Easily edit and control the switch for each feature at every quality level on each platform, then automatically generate macro definitions to reduce the number of Shader Variants.
-Easy to customize, suitable for various Shader Languages/Game Engines.
+Configure feature switches per platform and quality tier via Excel, then auto-generate an HLSL preprocessor macro header to reduce shader variant count.
+Easy to customize, works with Unity / Unreal and any shader language using C-style preprocessor.
 
 ## Usage
 
-1. Run `ShaderPlatformMacroGenerator.exe`
-2. Click `Edit` to open the config file and add the keywords you need.
-3. Click `Reload` to update the config.
-4. Enable/disable each feature based on each platform.![image](./~Assets/Snipaste_2025-04-23_16-59-53.png)
-5. Click `Generate` to save as a file.
+### 方式一：直接运行 EXE / Option 1: Run EXE directly
 
-## Build
+双击 `ShaderPlatformMacroGenerator.exe`，自动读取同目录下的 `Config.xlsx`，弹窗显示生成结果，点击按钮复制到剪贴板。
 
-1. Run `_install_deps.bat`
+Double-click `ShaderPlatformMacroGenerator.exe`. It reads `Config.xlsx` from the same directory, shows the generated result in a popup, and provides a button to copy to clipboard.
 
-   > - Python==3.12.1
-   > - PyQt5==5.15.11
-   > - pyinstaller==6.13.0
-   >
-2. Run `_build.bat`
+### 方式二：通过 bat 指定配置文件 / Option 2: Specify config via bat
 
-## Sample
+双击 `_run_py.bat`（或自定义 bat），通过命令行参数指定 Excel 路径：
 
-### config.json
+Double-click `_run_py.bat` (or a custom bat) to specify the Excel path via command-line argument:
 
-```json
-{
-    "output_path": "Output/output.hlsl",
-    "force_overwrite": false,
-    "prefix": "",
-    "postfix": "",
-    "file_include_macro": "PLATFORM_FEATURE_MACRO_INCLUDE",
-    "row_height": 40,
-    "row_header_width": 250,
-    "column_width": 150,
-    "column_header_height": 25,
-    "font_size": 10,
-    "platforms": [
-        {
-            "name": "PC",
-            "macros": [
-                "defined(PLATFORM_PC)",
-                "|| defined(SHADER_API_DX11)"
-            ]
-        },
-        {
-            "name": "IOS",
-            "macros": [
-                "defined(PLATFORM_IOS)"
-            ]
-        }
-    ],
-    "qualities": [
-        {
-            "name": "High",
-            "macros": [
-                "QUALITY_HIGH || QUALITY_ULTRA"
-            ]
-        },
-        {
-            "name": "Low",
-            "macros": [
-                "QUALITY_LOW"
-            ]
-        }
-    ],
-    "feature_groups": [
-        {
-            "name": "Default",
-            "features": [
-                {
-                    "name": "Tessellation",
-                    "macros": [
-                        "#define PLATFORM_ENABLE_TESSELLATION $value",
-                        "#define PLATFORM_ENABLE_GEOMETRY_SHADER $value",
-                        ""
-                    ]
-                },
-                {
-                    "name": "Ray Marching",
-                    "macros": [
-                        "#define PLATFORM_ENABLE_RAY_MARCHING $value",
-                        ""
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Character",
-            "features": [
-                {
-                    "name": "Subsurface",
-                    "macros": [
-                        "#if defined(PLATFORM_ENABLE_SUBSURFACE)",
-                        "    #undef PLATFORM_ENABLE_SUBSURFACE",
-                        "    #define PLATFORM_ENABLE_SUBSURFACE $value",
-                        "#endif"
-                    ]
-                }
-            ]
-        }
-    ],
-    "settings": {
-        "PC|Low": {
-            "Ray Marching": 0,
-            "Subsurface": 0,
-            "Tessellation": 0
-        },
-        "IOS|Low": {
-            "Subsurface": 0,
-            "Ray Marching": 0,
-            "Tessellation": 0
-        }
-    }
-}
+```bat
+@echo off
+python "%~dp0main.py" "Config.xlsx"
+pause
 ```
 
-### output.hlsl
+也可指定其他路径 / You can also specify a different path:
 
-```csharp
+```bat
+ShaderPlatformMacroGenerator.exe "path/to/MyConfig.xlsx"
+```
+
+## Excel 配置格式 / Excel Configuration Format
+
+配置文件为 `.xlsx` 格式，包含以下 4 个 Sheet：
+
+The config file is in `.xlsx` format with 4 sheets:
+
+### Platform Macros
+
+定义平台及其预处理条件。A 列为平台名，B 列为宏条件（支持多行拼接）。
+
+Defines platforms and their preprocessor conditions. Column A = platform name, Column B = macro condition (supports multi-line concatenation).
+
+| A (Platform) | B (Condition) |
+|---|---|
+| PC | `defined(SHADER_API_D3D11)` |
+| | `\|\| defined(SHADER_API_D3D12)` |
+| IOS | `defined(SHADER_API_METAL)` |
+
+### Quality Macros
+
+定义画质等级及其预处理条件。格式与 Platform Macros 一致，支持多行。
+
+Defines quality tiers and their preprocessor conditions. Same format as Platform Macros, supports multi-line.
+
+| A (Quality) | B (Condition) |
+|---|---|
+| High | `HYG_GRAPHIC_QUALITY_HIGH` |
+| Medium | `HYG_GRAPHIC_QUALITY_MEDIUM` |
+| Low | `HYG_GRAPHIC_QUALITY_LOW` |
+
+### Feature Switch
+
+二维矩阵：行 = Feature，列 = Platform × Quality。
+
+2D matrix: rows = Features, columns = Platform × Quality.
+
+- Row 1：平台名（合并单元格跨越对应画质列） / Platform names (merged cells spanning quality columns)
+- Row 2：画质名 / Quality names
+- Row 3+：数据行 / Data rows
+  - A 列有值、B 列为空 → 分组标题（输出为注释） / A has value, B empty → group header (output as comment)
+  - A + B 列都有值 → Feature（B = Keyword，后续列 = 各组合的值） / A + B both have values → Feature (B = Keyword, following columns = values per combination)
+  - 空行 → 忽略 / Empty row → skip
+
+值可以是数字、字符串或函数调用，原样输出到 `#define` 后。
+
+Values can be numbers, strings, or function calls — output as-is after `#define`.
+
+### Other Settings
+
+通用的 Key-Value 配置。A 列为 key 名，B 列为值（支持多行）。
+
+Generic key-value settings. Column A = key name, Column B = value (supports multi-line).
+
+| A (Key) | B (Value) |
+|---|---|
+| Prefix | `// Tool Path: ...` |
+| | `// 第二行注释` |
+| File Include Macro | `MY_INCLUDE_GUARD_NAME` |
+
+## Sample Output
+
+```hlsl
+// Tool Path: //XXX/ShaderPlatformMacroGenerator
+
 // Generated by Shader Platform Macro Generator (https://github.com/JasonMa0012/ShaderPlatformMacroGenerator)
 // Unity Builtin Macros: https://docs.unity3d.com/2022.3/Documentation/Manual/SL-BuiltinMacros.html
 // Unreal Builtin Macros: https://github.com/EpicGames/UnrealEngine/blob/5.5/Engine/Shaders/Public/Platform.ush
 
-#ifndef PLATFORM_FEATURE_MACRO_INCLUDE
-    #define PLATFORM_FEATURE_MACRO_INCLUDE
+#ifndef COMMON_PLATFORM_FEATURE_CODEGEN_INCLUDE
+    #define COMMON_PLATFORM_FEATURE_CODEGEN_INCLUDE
 
-    #if defined(PLATFORM_PC) || defined(SHADER_API_DX11)
-        #if QUALITY_HIGH || QUALITY_ULTRA
-            #define PLATFORM_ENABLE_TESSELLATION 1
-            #define PLATFORM_ENABLE_GEOMETRY_SHADER 1
-          
-            #define PLATFORM_ENABLE_RAY_MARCHING 1
-          
-            #if defined(PLATFORM_ENABLE_SUBSURFACE)
-                #undef PLATFORM_ENABLE_SUBSURFACE
-                #define PLATFORM_ENABLE_SUBSURFACE 1
-            #endif
-        #elif QUALITY_LOW
-            #define PLATFORM_ENABLE_TESSELLATION 0
-            #define PLATFORM_ENABLE_GEOMETRY_SHADER 0
-          
-            #define PLATFORM_ENABLE_RAY_MARCHING 0
-          
-            #if defined(PLATFORM_ENABLE_SUBSURFACE)
-                #undef PLATFORM_ENABLE_SUBSURFACE
-                #define PLATFORM_ENABLE_SUBSURFACE 0
-            #endif
+    // PC
+    #if defined(SHADER_API_D3D11) || defined(SHADER_API_D3D12)
+        #if HYG_GRAPHIC_QUALITY_HIGH
+            // Reflection Probe
+            #define _REFLECTION_PROBE_BLENDING 1
+            #define _REFLECTION_PROBE_BOX_PROJECTION 1
+            // Scene
+            #define _POM_SAMPLE_COUNT 10
+        #elif HYG_GRAPHIC_QUALITY_MEDIUM
+            // Reflection Probe
+            #define _REFLECTION_PROBE_BLENDING 1
+            #define _REFLECTION_PROBE_BOX_PROJECTION 1
+            // Scene
+            #define _POM_SAMPLE_COUNT 8
         #endif
-    #elif defined(PLATFORM_IOS)
-        #if QUALITY_HIGH || QUALITY_ULTRA
-            #define PLATFORM_ENABLE_TESSELLATION 1
-            #define PLATFORM_ENABLE_GEOMETRY_SHADER 1
-          
-            #define PLATFORM_ENABLE_RAY_MARCHING 1
-          
-            #if defined(PLATFORM_ENABLE_SUBSURFACE)
-                #undef PLATFORM_ENABLE_SUBSURFACE
-                #define PLATFORM_ENABLE_SUBSURFACE 1
-            #endif
-        #elif QUALITY_LOW
-            #define PLATFORM_ENABLE_TESSELLATION 0
-            #define PLATFORM_ENABLE_GEOMETRY_SHADER 0
-          
-            #define PLATFORM_ENABLE_RAY_MARCHING 0
-          
-            #if defined(PLATFORM_ENABLE_SUBSURFACE)
-                #undef PLATFORM_ENABLE_SUBSURFACE
-                #define PLATFORM_ENABLE_SUBSURFACE 0
-            #endif
+    // IOS
+    #elif defined(SHADER_API_METAL)
+        #if HYG_GRAPHIC_QUALITY_HIGH
+            ...
         #endif
     #endif
 
-#endif // PLATFORM_FEATURE_MACRO_INCLUDE
+#endif // COMMON_PLATFORM_FEATURE_CODEGEN_INCLUDE
+```
+
+## Build
+
+1. 安装依赖：运行 `_install_deps.bat` / Install dependencies: run `_install_deps.bat`
+
+   > - Python >= 3.10
+   > - openpyxl
+   > - pyinstaller
+
+2. 打包 EXE：运行 `_build.bat` / Build EXE: run `_build.bat`
+
+## Project Structure
+
+```
+├── main.py              # 入口：参数解析 + 生成 + 弹窗 / Entry: arg parsing + generation + popup
+├── excel_reader.py      # Excel 解析（动态发现，不硬编码索引） / Excel parser (dynamic discovery, no hardcoded indices)
+├── hlsl_generator.py    # HLSL 代码生成 / HLSL code generation
+├── Config.xlsx          # 配置文件 / Configuration file
+├── _run_py.bat          # Python 运行入口 / Python run entry
+├── _build.bat           # PyInstaller 打包脚本 / PyInstaller build script
+├── _install_deps.bat    # 依赖安装脚本 / Dependency install script
+└── requirements.txt     # Python 依赖 / Python dependencies
 ```
