@@ -1,8 +1,17 @@
 from excel_reader import ExcelConfig, FeatureRow, GroupHeader
 
 
+def _calc_keyword_width(features: list) -> int:
+    max_len = 0
+    for f in features:
+        if isinstance(f, FeatureRow):
+            max_len = max(max_len, len(f.keyword))
+    return max_len
+
+
 def generate_hlsl(config: ExcelConfig) -> str:
     lines = []
+    keyword_width = _calc_keyword_width(config.features)
 
     if config.prefix_lines:
         for line in config.prefix_lines:
@@ -33,7 +42,8 @@ def generate_hlsl(config: ExcelConfig) -> str:
                     lines.append(f"            // {feature.name}")
                 elif isinstance(feature, FeatureRow):
                     value = feature.values.get((platform.name, quality.name), "")
-                    lines.append(f"            #define {feature.keyword} {value}")
+                    padded_keyword = feature.keyword.ljust(keyword_width)
+                    lines.append(f"            #define {padded_keyword} {value}")
 
         lines.append("        #endif")
 
